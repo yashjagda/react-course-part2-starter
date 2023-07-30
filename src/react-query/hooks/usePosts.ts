@@ -9,16 +9,17 @@ interface Post {
 }
 
 interface PostQuery {
-    pages: number;
+    page: number;
     pageSize: number
 }
 
-const usePosts = (userId : number | undefined) => {
+const usePosts = (query: PostQuery) => {
     const fetchPosts = () => {
         return axios
             .get('https://jsonplaceholder.typicode.com/posts',{
                 params : {
-                    userId
+                    _start: (query.page - 1) * query.pageSize,
+                    _limit: query.pageSize
                 }
             })
             .then((res) => {
@@ -28,7 +29,7 @@ const usePosts = (userId : number | undefined) => {
     //api function call
     return useQuery<Post[], Error>({
     // /users/1/posts and for null only /posts
-    queryKey: userId ? ['users',userId,'posts'] : ['posts'],
+    queryKey: ['posts', query],
     queryFn: fetchPosts,
     staleTime: 1 * 60 * 1000,
   });

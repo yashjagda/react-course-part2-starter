@@ -5,7 +5,7 @@ const PostList = () => {
   // const [userId, setUserId] = useState<number>();
   const pageSize = 10;
   const [page, setPage] = useState<number>(1);
-  const { data:posts, error, isLoading } = usePosts();
+  const { data:posts, error, isLoading } = usePosts({ page, pageSize});
 
   if (isLoading) return <p>Loading Posts!!!!...</p>;
   if (error) return <p>{error.message}</p>;
@@ -29,6 +29,19 @@ const PostList = () => {
         </li>
       ))}
       </ul>
+
+      <button
+        disabled = {page === 1}
+        className = "btn btn-primary my-3"
+        onClick = { () => setPage(page - 1) }
+      >Previous
+      </button>
+      <button
+        className = "btn btn-primary my-3"
+        onClick = { () => setPage(page + 1) }
+      >Next
+      </button>
+
     </>
     
   );
